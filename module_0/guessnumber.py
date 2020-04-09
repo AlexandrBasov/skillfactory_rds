@@ -11,7 +11,7 @@ def game_core_binary(number):
     while start < end:
         count += 1
         middle = (start + end) // 2
-        if number == middle:
+        if number == variants[middle]:
             break
         if number <= variants[middle]:
             end = middle
