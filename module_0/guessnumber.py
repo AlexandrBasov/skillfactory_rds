@@ -2,35 +2,46 @@ import numpy as np
 
 
 def game_core_binary(number):
-    """В основе данного метода лежит Бинарный поиск (также известен как метод деления пополам).
-     Возможные варианты ответов представлены в виде упорядоченного массива variants."""
-    count = 0
-    variants = [x for x in range(1, 101)]
-    start = 0
-    end = len(variants)
-    while start < end:
-        count += 1
-        middle = (start + end) // 2
+    """To guess a number we implement a binary search algorithm."""
+
+    variants = [x for x in range(1, 101)]  # All possible answers from 1 to 100
+
+    attempts = 0  # counter for number of attempts
+    left = 0
+    right = len(variants)
+
+    while left < right:
+        attempts += 1
+        middle = (left + right) // 2
         if number == variants[middle]:
             break
         if number <= variants[middle]:
-            end = middle
+            right = middle
         else:
-            start = middle + 1
-    return count  # выход из цикла, если угадали
+            left = middle + 1
+
+    return attempts
 
 
 def score_game(game_core):
-    """Запускаем игру 1000 раз, чтобы узнать, как быстро игра угадывает число"""
-    count_ls = []
-    np.random.seed(1)  # фиксируем RANDOM SEED, чтобы ваш эксперимент был воспроизводим!
-    random_array = np.random.randint(1, 101, size=(1000))
-    for number in random_array:
-        count_ls.append(game_core(number))
-    score = int(np.mean(count_ls))
-    print(f"Ваш алгоритм угадывает число в среднем за {score} попыток")
-    return score
+    """Run the game 1000 times to find out how fast the game guesses
+     number"""
+
+    results_list = []
+
+    # fix RANDOM SEED so that your experiment is reproducible!
+    np.random.seed(1)
+
+    random_numbers = np.random.randint(1, 101, size=1000)
+
+    for number in random_numbers:
+        results_list.append(game_core(number))
+
+    average_attempts = int(np.mean(results_list))
+
+    print(f"Your algorithm guesses the number on average in {average_attempts} attempts")
+    return average_attempts
 
 
-# запускаем
+# run the game
 score_game(game_core_binary)
